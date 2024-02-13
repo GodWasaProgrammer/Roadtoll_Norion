@@ -1,4 +1,6 @@
-﻿namespace Roadtoll_Norion
+﻿using PublicHoliday;
+
+namespace Roadtoll_Norion
 {
     public class TollCalculator
     {
@@ -105,30 +107,16 @@
 
         private bool IsTollFreeDate(DateTime date)
         {
-            int year = date.Year;
-            int month = date.Month;
-            int day = date.Day;
-
+            IList<DateTime> Holidays = new SwedenPublicHoliday().PublicHolidays(date.Year);
+            
             if (FreeWeekDays.Contains(date.DayOfWeek)) 
                 return true;
 
-            if (year == 2013)
-            {
-                if (month == 1 && day == 1 ||
-                    month == 3 && (day == 28 || day == 29) ||
-                    month == 4 && (day == 1 || day == 30) ||
-                    month == 5 && (day == 1 || day == 8 || day == 9) ||
-                    month == 6 && (day == 5 || day == 6 || day == 21) ||
-                    month == 7 ||
-                    month == 11 && day == 1 ||
-                    month == 12 && (day == 24 || day == 25 || day == 26 || day == 31))
-                {
-                    return true;
-                }
-
-            }
+            var dateOnly = date.Date;
+            if (Holidays.Contains(dateOnly))
+                return true;
+            
             return false;
-
         }
 
     }

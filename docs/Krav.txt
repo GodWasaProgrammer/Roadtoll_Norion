@@ -12,4 +12,6 @@ Tider                   Belopp
 18:00–18:29     8 kr
 18:30–05:59     0 kr
 
-Trängselskatt tas ut för fordon som passerar en betalstation måndag till fredag mellan 06.00 och 18.29. Skatt tas inte ut lördagar, helgdagar, dagar före helgdag eller under juli månad. Vissa fordon är undantagna från trängselskatt. En bil som passerar flera betalstationer inom 60 minuter bara beskattas en gång. Det belopp som då ska betalas är det högsta beloppet av de passagerna.
+Trängselskatt tas ut för fordon som passerar en betalstation måndag till fredag mellan 06.00 och 18.29. 
+Skatt tas inte ut lördagar, helgdagar, dagar före helgdag eller under juli månad. V
+issa fordon är undantagna från trängselskatt. En bil som passerar flera betalstationer inom 60 minuter bara beskattas en gång. Det belopp som då ska betalas är det högsta beloppet av de passagerna.

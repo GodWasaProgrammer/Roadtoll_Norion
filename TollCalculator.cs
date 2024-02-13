@@ -1,9 +1,8 @@
-﻿    namespace Roadtoll_Norion
+﻿namespace Roadtoll_Norion
 {
-
     public class TollCalculator
     {
-        static List<Type> TollFreeVehicles = new List<Type>
+        static List<Type> TollFreeVehicles = new()
         {
             typeof(Motorbike),
             typeof(Tractor),
@@ -11,6 +10,13 @@
             typeof(Diplomat),
             typeof(Foreign)
         };
+
+        static List<DayOfWeek> FreeWeekDays = new List<DayOfWeek>
+        {
+            DayOfWeek.Saturday,
+            DayOfWeek.Sunday
+        };
+
         /**
          * Calculate the total toll fee for one day
          *
@@ -18,7 +24,6 @@
          * @param dates   - date and time of all passes on one day
          * @return - the total toll fee for that day
          */
-
         public int GetTollFee(IVehicle vehicle, DateTime[] dates)
         {
             DateTime intervalStart = dates[0];
@@ -49,6 +54,12 @@
 
         }
 
+        /// <summary>
+        /// The vehicle to be checked if it is toll free
+        /// This will be checked against the list of toll free vehicles
+        /// </summary>
+        /// <param name="vehicle"></param>
+        /// <returns></returns>
         private bool IsTollFreeVehicle(IVehicle vehicle)
         {
             if (vehicle == null) 
@@ -112,7 +123,8 @@
             int month = date.Month;
             int day = date.Day;
 
-            if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday) return true;
+            if (FreeWeekDays.Contains(date.DayOfWeek)) 
+                return true;
 
             if (year == 2013)
             {

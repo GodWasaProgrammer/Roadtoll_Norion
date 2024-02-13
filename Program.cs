@@ -1,16 +1,12 @@
-﻿using TollFeeCalculator;
-
-namespace Roadtoll_Norion
+﻿namespace Roadtoll_Norion
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            Console.WriteLine("Hello, World!");
-
             TollCalculator tollCalculator = new TollCalculator();
 
-            Vehicle Car = new Car();
+            IVehicle Car = new Car();
 
             DateTime[] dateTimes = new DateTime[5];
 
@@ -25,6 +21,9 @@ namespace Roadtoll_Norion
             {
                 Console.WriteLine(tollCalculator.GetTollFee(dt, Car));
             }
+
         }
+
     }
+
 }

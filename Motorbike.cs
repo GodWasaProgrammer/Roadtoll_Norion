@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TollFeeCalculator
+﻿namespace Roadtoll_Norion
 {
-    public class Motorbike : Vehicle
+    public class Motorbike : IVehicle
     {
         public string GetVehicleType()
         {
             return "Motorbike";
         }
+
     }
+
 }

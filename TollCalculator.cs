@@ -1,9 +1,16 @@
-﻿namespace Roadtoll_Norion
+﻿    namespace Roadtoll_Norion
 {
 
     public class TollCalculator
     {
-
+        static List<Type> TollFreeVehicles = new List<Type>
+        {
+            typeof(Motorbike),
+            typeof(Tractor),
+            typeof(Emergency),
+            typeof(Diplomat),
+            typeof(Foreign)
+        };
         /**
          * Calculate the total toll fee for one day
          *
@@ -44,14 +51,13 @@
 
         private bool IsTollFreeVehicle(IVehicle vehicle)
         {
-            if (vehicle == null) return false;
-            string vehicleType = vehicle.GetVehicleType();
-            return vehicleType.Equals(TollFreeVehicles.Motorbike.ToString()) ||
-                   vehicleType.Equals(TollFreeVehicles.Tractor.ToString()) ||
-                   vehicleType.Equals(TollFreeVehicles.Emergency.ToString()) ||
-                   vehicleType.Equals(TollFreeVehicles.Diplomat.ToString()) ||
-                   vehicleType.Equals(TollFreeVehicles.Foreign.ToString()) ||
-                   vehicleType.Equals(TollFreeVehicles.Military.ToString());
+            if (vehicle == null) 
+                return false;
+
+            if(TollFreeVehicles.Contains(vehicle.GetType()))
+                return true;
+            
+            return false;
         }
 
         public int GetTollFee(DateTime date, IVehicle vehicle)

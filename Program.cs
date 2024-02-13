@@ -6,7 +6,14 @@
         {
             TollCalculator tollCalculator = new TollCalculator();
 
-            IVehicle Car = new Car();
+            //IVehicle Car = new Car();
+            //IVehicle Foreign = new Foreign();
+            //IVehicle Diplomat = new Diplomat();
+            //IVehicle Emergency = new Emergency();
+            //IVehicle Tractor = new Tractor();
+            //IVehicle Motorbike = new Motorbike();
+
+            //List<IVehicle> PassingVehicles = new List<IVehicle> { Foreign, Diplomat, Emergency, Tractor, Motorbike };
 
             DateTime[] dateTimes = new DateTime[5];
 

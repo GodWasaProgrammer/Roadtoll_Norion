@@ -6,7 +6,7 @@
         {
             TollCalculator tollCalculator = new TollCalculator();
 
-            //IVehicle Car = new Car();
+            IVehicle Car = new Car();
             //IVehicle Foreign = new Foreign();
             //IVehicle Diplomat = new Diplomat();
             //IVehicle Emergency = new Emergency();

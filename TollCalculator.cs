@@ -2,6 +2,9 @@
 {
     public class TollCalculator
     {
+        /// <summary>
+        /// List of vehicles that are toll free
+        /// </summary>
         static List<Type> TollFreeVehicles = new()
         {
             typeof(Motorbike),
@@ -11,10 +14,29 @@
             typeof(Foreign)
         };
 
+        /// <summary>
+        /// List of days that are toll free
+        /// </summary>
         static List<DayOfWeek> FreeWeekDays = new List<DayOfWeek>
         {
             DayOfWeek.Saturday,
             DayOfWeek.Sunday
+        };
+
+        /// <summary>
+        /// List of times and fees, which is using the TimeAndFee class for a structured approach
+        /// </summary>
+        static List<TimeAndFee> TimesAndFees = new()
+        {
+            new(06,00,06,29,8),
+            new(06,30,06,59,13),
+            new(07,00,07,59,18),
+            new(08,00,08,29,13),
+            new(08,30,14,59,8),
+            new(15,00,15,29,13),
+            new(15,30,16,59,18),
+            new(17,00,17,59,13),
+            new(18,00,18,29,8)
         };
 
         /**
@@ -73,48 +95,12 @@
 
         public int GetTollFee(DateTime date, IVehicle vehicle)
         {
-            if (IsTollFreeDate(date))
-            {
-                return 0;
-            }
+            if (IsTollFreeDate(date) || IsTollFreeVehicle(vehicle))
+            return 0;
 
-            if (IsTollFreeVehicle(vehicle))
-            {
-                return 0;
-            }
+            var TimeFee = TimesAndFees.Where(x => x.IsInTollTime(date)).FirstOrDefault();
 
-            int hour = date.Hour;
-            int minute = date.Minute;
-
-            // if between 6:00 and 6:29 cost is 8
-            if (hour == 6 && minute >= 0 && minute <= 29) return 8;
-
-            // if between 6:30 and 6:59 cost is 13
-            if (hour == 6 && minute >= 30 && minute <= 59) return 13;
-
-            // if between 7:00 and 7:59 cost is 18
-            if (hour == 7 && minute >= 0 && minute <= 59) return 18;
-
-            // if between 8:00 and 8:29 cost is 13
-            if (hour == 8 && minute >= 0 && minute <= 29) return 13;
-
-            /// this one is strange why the => on hour
-            if (hour >= 8 && hour <= 14 && minute >= 30 && minute <= 59) return 8;
-
-            // if between 15:00 and 15:29 cost is 13
-            if (hour == 15 && minute >= 0 && minute <= 29) return 13;
-
-            // if between 15:30 and 16:59 cost is 18
-            if (hour == 15 && minute >= 0 || hour == 16 && minute <= 59) return 18;
-
-            // if between 17:00 and 17:59 cost is 13
-            if (hour == 17 && minute >= 0 && minute <= 59) return 13;
-
-            // if between 18:00 and 18:29 cost is 8
-            if (hour == 18 && minute >= 0 && minute <= 29) return 8;
-
-            // all other times cost is 0
-            else return 0;
+            return TimeFee == null ? 0 : TimeFee.Fee;
         }
 
         private bool IsTollFreeDate(DateTime date)

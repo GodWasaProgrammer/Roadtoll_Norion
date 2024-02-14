@@ -21,6 +21,11 @@
             return time >= _start && time <= _end;
         }
 
+        public override string ToString()
+        {
+            return $"Start Time: {_start}, End Time: {_end}, Fee: {_fee}";
+        }
+
     }
 
 }

@@ -1,9 +1,23 @@
 ﻿using PublicHoliday;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Roadtoll_Norion
 {
     public class TollCalculator
     {
+        /// <summary>
+        /// Added requirement to supply year to calculate
+        /// This is to cut down on possibly expensive API calls
+        /// within the calling method.
+        /// </summary>
+        /// <param name="YearToCalculate"></param>
+        public TollCalculator(DateOnly YearToCalculate)
+        {
+            Holidays = new SwedenPublicHoliday().PublicHolidays(YearToCalculate.Year);
+        }
+
+        private IList<DateTime> Holidays;
+
         /// <summary>
         /// List of vehicles that are toll free
         /// </summary>
@@ -48,57 +62,59 @@ namespace Roadtoll_Norion
          * @param dates   - date and time of all passes on one day
          * @return - the total toll fee for that day
          */
-        public TollFeeResult GetTollFee(IVehicle vehicle, DateTime[] dates)
+        public int GetTollFee(Vehicle vehicle, DateTime[] dates)
         {
-            List<int> feesPerPass = new List<int>();
-
-            List<bool> isTollFreePerPass = new List<bool>();
-
-            DateTime? previousPassDate = null;
-
-            int totalFeeForDay = 0;
-
-            foreach (DateTime passDate in dates)
+            // if we dont have a vehicle or dates, we cant calculate the toll fee
+            // or if the vehicle is tollfree, or the date is tollfree we return 0
+            if (vehicle == null || dates == null || IsTollFreeVehicle(vehicle) || IsTollFreeDate(dates[0]))
             {
-                // Get the toll fee for the pass
-                int nextFee = GetTollFee(passDate, vehicle);
-                bool isWithinGracePeriod = false;
+                return 0;
+            }
 
-                // Determine if the pass is within the 60-minute grace period
-                if (previousPassDate != null && (passDate - previousPassDate.Value) <= TimeSpan.FromMinutes(60))
+            // set the initial date to the first date in the array
+            DateTime? StartTime = dates.First();
+
+            // since we dont know if the dates are in order, we will sort them
+            Array.Sort(dates);
+
+            List<List<DateTime>> GraceTimes = new List<List<DateTime>>();
+
+            // storing the values within an hour-interval
+            var GracePeriod = new List<DateTime>();
+
+            foreach (DateTime date in dates)
+            {
+                int nextFee = GetTollFee(date, vehicle);
+
+                // if the date is within the grace period, we will add it to the list of grace period passes
+                if (StartTime != null && (date - StartTime.Value) <= TimeSpan.FromMinutes(60))
                 {
-                    isWithinGracePeriod = true;
-
-                    var lastFee = feesPerPass.LastOrDefault();
-
-                    if (nextFee > lastFee)
-                    {
-                        // we deduct the last fee if it was lower than the current fee
-                        totalFeeForDay -= lastFee;
-                        // we then add the current fee which was higher than the last fee
-                        totalFeeForDay += nextFee;
-                    }
-
+                    GracePeriod.Add(date);
                 }
                 else
                 {
-                    totalFeeForDay += nextFee;
+                    GraceTimes.Add(GracePeriod);
+                    GracePeriod = new List<DateTime>();
+                    StartTime = date;
+                    GracePeriod.Add(date);
                 }
-                // Add the fee to the list of fees
-                feesPerPass.Add(nextFee);
 
-                // Add the result to the list of toll-free passes
-                isTollFreePerPass.Add(isWithinGracePeriod);
+                // if we have made segments of all time intervals, we will add the last segment to the list of grace period passes
+                if (date == dates.Last())
+                {
+                    GraceTimes.Add(GracePeriod);
+                }
 
-                // sets our previous pass date to the current pass date
-                // to be able to compare the next pass date with the current pass date
-                previousPassDate = passDate;
             }
 
-            // Ensure the total fee does not exceed 60
-            totalFeeForDay = Math.Min(totalFeeForDay, 60);
+            int totalFee = 0;
+            foreach (var gracePeriod in GraceTimes)
+            {
+                totalFee += gracePeriod.Max(x => GetTollFee(x, vehicle));
+            }
 
-            return new TollFeeResult(totalFeeForDay, feesPerPass, isTollFreePerPass);
+            if (totalFee > 60) totalFee = 60;
+            return totalFee;
         }
 
         /// <summary>
@@ -107,7 +123,7 @@ namespace Roadtoll_Norion
         /// </summary>
         /// <param name="vehicle"></param>
         /// <returns></returns>
-        private bool IsTollFreeVehicle(IVehicle vehicle)
+        private bool IsTollFreeVehicle(Vehicle vehicle)
         {
             if (vehicle == null)
                 return false;
@@ -118,7 +134,13 @@ namespace Roadtoll_Norion
             return false;
         }
 
-        private int GetTollFee(DateTime date, IVehicle vehicle)
+        /// <summary>
+        /// In my opinion this shouldnt be an overload, it could be its own method, because its only ever called in another overload...
+        /// </summary>
+        /// <param name="date"></param>
+        /// <param name="vehicle"></param>
+        /// <returns></returns>
+        private int GetTollFee(DateTime date, Vehicle vehicle)
         {
             if (IsTollFreeDate(date) || IsTollFreeVehicle(vehicle))
                 return 0;
@@ -128,10 +150,13 @@ namespace Roadtoll_Norion
             return TimeFee == null ? 0 : TimeFee.Fee;
         }
 
+        /// <summary>
+        /// Checks if our supplied date is a holiday, or a weekday
+        /// </summary>
+        /// <param name="date"> The Date To Be Checked</param>
+        /// <returns>a bool that tells you if its free or not</returns>
         private bool IsTollFreeDate(DateTime date)
         {
-            IList<DateTime> Holidays = new SwedenPublicHoliday().PublicHolidays(date.Year);
-
             if (FreeWeekDays.Contains(date.DayOfWeek))
                 return true;
 

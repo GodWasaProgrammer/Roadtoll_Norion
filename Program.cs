@@ -4,7 +4,9 @@
     {
         static void Main()
         {
-            TollCalculator tollCalculator = new TollCalculator();
+            DateOnly CurrentDate = new DateOnly(2024, 2, 1);
+
+            TollCalculator tollCalculator = new TollCalculator(CurrentDate);
 
             // declare passes in a single day
             DateTime[] PassesInOneDay = new DateTime[]
@@ -17,21 +19,12 @@
                 new DateTime(2024, 2, 1, 17, 25, 0),
             };
 
-            Guid RegistryPlate = new Guid();
+            //DateTime[] NullPass = new DateTime[] { };
 
             // Call GetTollFee method
-            TollFeeResult tollFeeResult = tollCalculator.GetTollFee(new Car(RegistryPlate), PassesInOneDay);
+            int totalfee = tollCalculator.GetTollFee(new Car(), PassesInOneDay);
 
-            // Create a new instance of Bill
-            Bill exampleBill = new(new Car(RegistryPlate));
-
-            exampleBill.AddTotalFee(tollFeeResult.TotalFee);
-
-            // Add toll passes with fees to the bill
-            exampleBill.AddTollPasses(PassesInOneDay, tollFeeResult.FeesPerPass, tollFeeResult.IsTollFreePerPass);
-
-            Console.WriteLine(exampleBill);
-
+            Console.WriteLine(totalfee);
         }
 
     }

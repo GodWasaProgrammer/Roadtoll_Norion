@@ -1,6 +1,6 @@
 ﻿namespace Roadtoll_Norion
 {
-    internal class Emergency : IVehicle
+    internal class Emergency : Vehicle
     {
         public string GetVehicleType()
         {

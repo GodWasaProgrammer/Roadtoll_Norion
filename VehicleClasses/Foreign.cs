@@ -1,6 +1,6 @@
 ﻿namespace Roadtoll_Norion
 {
-    internal class Foreign : IVehicle
+    internal class Foreign : Vehicle
     {
         public string GetVehicleType()
         {

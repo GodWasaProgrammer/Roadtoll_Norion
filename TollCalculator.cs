@@ -48,34 +48,57 @@ namespace Roadtoll_Norion
          * @param dates   - date and time of all passes on one day
          * @return - the total toll fee for that day
          */
-        public int GetTollFee(IVehicle vehicle, DateTime[] dates)
+        public TollFeeResult GetTollFee(IVehicle vehicle, DateTime[] dates)
         {
-            DateTime intervalStart = dates[0];
-            int totalFee = 0;
-            foreach (DateTime date in dates)
+            List<int> feesPerPass = new List<int>();
+
+            List<bool> isTollFreePerPass = new List<bool>();
+
+            DateTime? previousPassDate = null;
+
+            int totalFeeForDay = 0;
+
+            foreach (DateTime passDate in dates)
             {
-                int nextFee = GetTollFee(date, vehicle);
-                int tempFee = GetTollFee(intervalStart, vehicle);
+                // Get the toll fee for the pass
+                int nextFee = GetTollFee(passDate, vehicle);
+                bool isWithinGracePeriod = false;
 
-                long diffInMillies = date.Millisecond - intervalStart.Millisecond;
-                long minutes = diffInMillies / 1000 / 60;
-
-                if (minutes <= 60)
+                // Determine if the pass is within the 60-minute grace period
+                if (previousPassDate != null && (passDate - previousPassDate.Value) <= TimeSpan.FromMinutes(60))
                 {
-                    if (totalFee > 0) totalFee -= tempFee;
-                    if (nextFee >= tempFee) tempFee = nextFee;
-                    totalFee += tempFee;
+                    isWithinGracePeriod = true;
+
+                    var lastFee = feesPerPass.LastOrDefault();
+
+                    if (nextFee > lastFee)
+                    {
+                        // we deduct the last fee if it was lower than the current fee
+                        totalFeeForDay -= lastFee;
+                        // we then add the current fee which was higher than the last fee
+                        totalFeeForDay += nextFee;
+                    }
+
                 }
                 else
                 {
-                    totalFee += nextFee;
+                    totalFeeForDay += nextFee;
                 }
+                // Add the fee to the list of fees
+                feesPerPass.Add(nextFee);
 
+                // Add the result to the list of toll-free passes
+                isTollFreePerPass.Add(isWithinGracePeriod);
+
+                // sets our previous pass date to the current pass date
+                // to be able to compare the next pass date with the current pass date
+                previousPassDate = passDate;
             }
 
-            if (totalFee > 60) totalFee = 60;
-            return totalFee;
+            // Ensure the total fee does not exceed 60
+            totalFeeForDay = Math.Min(totalFeeForDay, 60);
 
+            return new TollFeeResult(totalFeeForDay, feesPerPass, isTollFreePerPass);
         }
 
         /// <summary>
@@ -86,19 +109,19 @@ namespace Roadtoll_Norion
         /// <returns></returns>
         private bool IsTollFreeVehicle(IVehicle vehicle)
         {
-            if (vehicle == null) 
+            if (vehicle == null)
                 return false;
 
-            if(TollFreeVehicles.Contains(vehicle.GetType()))
+            if (TollFreeVehicles.Contains(vehicle.GetType()))
                 return true;
-            
+
             return false;
         }
 
-        public int GetTollFee(DateTime date, IVehicle vehicle)
+        private int GetTollFee(DateTime date, IVehicle vehicle)
         {
             if (IsTollFreeDate(date) || IsTollFreeVehicle(vehicle))
-            return 0;
+                return 0;
 
             var TimeFee = TimesAndFees.Where(x => x.IsInTollTime(date)).FirstOrDefault();
 
@@ -108,14 +131,14 @@ namespace Roadtoll_Norion
         private bool IsTollFreeDate(DateTime date)
         {
             IList<DateTime> Holidays = new SwedenPublicHoliday().PublicHolidays(date.Year);
-            
-            if (FreeWeekDays.Contains(date.DayOfWeek)) 
+
+            if (FreeWeekDays.Contains(date.DayOfWeek))
                 return true;
 
             var dateOnly = date.Date;
             if (Holidays.Contains(dateOnly))
                 return true;
-            
+
             return false;
         }
 

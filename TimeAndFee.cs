@@ -15,17 +15,17 @@
             _fee = fee;
         }
 
+        /// <summary>
+        /// imternal method to let you know if the time is in the toll time
+        /// </summary>
+        /// <param name="Date"></param>
+        /// <returns></returns>
         internal bool IsInTollTime(DateTime Date)
         {
             TimeOnly time = TimeOnly.FromDateTime(Date);
             return time >= _start && time <= _end;
         }
 
-        public override string ToString()
-        {
-            return $"Start Time: {_start}, End Time: {_end}, Fee: {_fee}";
-        }
-
-    }
+    }   
 
 }

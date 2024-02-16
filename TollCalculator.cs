@@ -1,5 +1,4 @@
 ﻿using PublicHoliday;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Roadtoll_Norion
 {

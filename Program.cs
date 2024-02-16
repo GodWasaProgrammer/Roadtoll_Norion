@@ -31,12 +31,26 @@
                 new DateTime(2024,1,5,15,30, 0),
             };
 
+            DateTime[] EmptyDateTimes = new DateTime[] { };
+
             /// just for demonstration purposes
             // Call GetTollFee method
-            int totalfee = tollCalculator.GetTollFee(new Car(), PassesInOneDay);
-            
+            int totalFee = 0;
+            try
+            {
+                totalFee = tollCalculator.GetTollFee(new Car(), PassesInOneDay);
+            }
+            catch (ArgumentNullException ex)
+            {
+                Console.WriteLine($"Exception:{ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"{ex.Message}");
+            }
+
             ///just for demonstration purposes
-            Console.WriteLine(totalfee);
+            Console.WriteLine(totalFee);
         }
 
     }

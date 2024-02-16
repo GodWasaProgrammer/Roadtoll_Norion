@@ -28,7 +28,6 @@ namespace Roadtoll_Norion
         /// List of vehicles that are toll free
         /// I have also created the necessary classes for the vehicles
         /// which adhere to the Vehicle interface, and does not change any implementation
-        /// details of Vehicle
         /// </summary>
         static List<Type> TollFreeVehicles = new()
         {
@@ -106,7 +105,7 @@ namespace Roadtoll_Norion
 
             // since we dont know if the dates are in order, we will sort them
             Array.Sort(dates);
-
+            // our list of lists of time intervals, this is a list of all the passes within an hour
             List<List<DateTime>> graceTimes = new List<List<DateTime>>();
 
             // storing the values within an hour-interval
@@ -115,7 +114,7 @@ namespace Roadtoll_Norion
             foreach (DateTime date in dates)
             {
                 // if the date is within the grace period, we will add it to the list of grace period passes
-                if (startTime != null && (date - startTime.Value) <= TimeSpan.FromMinutes(60))
+                if (date - startTime.Value <= TimeSpan.FromMinutes(60))
                 {
                     gracePeriod.Add(date);
                 }
@@ -134,18 +133,31 @@ namespace Roadtoll_Norion
                 }
 
             }
-
+            // we then loop on our period
             int totalFee = 0;
             foreach (var currentGracePeriod in graceTimes)
             {
-                totalFee += currentGracePeriod.Max(x => GetTollFee(x, vehicle));
+                // this list will store all our fees for the tollpasses
+                List<int> fees = new List<int>();
+                foreach (var pass in currentGracePeriod)
+                {
+                    var TimeFee = TimesAndFees.Where(x => x.IsInTollTime(TimeOnly.FromDateTime(pass))).FirstOrDefault();
+                    if (TimeFee != null)
+                        fees.Add(TimeFee.Fee);
+                }
+                // we then only add the max one, and clear the list for the next loop.
+                totalFee += fees.Max();
+                fees.Clear();
             }
 
             if (totalFee > MaxTollFee) totalFee = MaxTollFee;
+
             return totalFee;
         }
 
         /// In my opinion this shouldnt be an overload, it could be its own method, because its only ever called in another overload...
+        /// atleast in the original code, since i dont like that it was being called by another overload, i made the necessary calls
+        /// directly from the other overload.
         /// </summary>
         /// <param name="date">the single date and time to be checked</param>
         /// <param name="vehicle">the vehicle which is being tolled</param>
@@ -168,8 +180,6 @@ namespace Roadtoll_Norion
 
         /// The vehicle to be checked if it is toll free
         /// This will be checked against the list of toll free vehicles
-        /// this does not have exception handling because it is private and only ever called in the GetTollFee methods
-        /// Which has themselves exception handling so empty or null will never be passed here
         /// </summary>
         /// <param name="vehicle"></param>
         /// <returns></returns>
@@ -200,11 +210,11 @@ namespace Roadtoll_Norion
                 return true;
 
             var isTomorrowAHoliday = date.AddDays(1).Date;
-            if(_Holidays.Contains(isTomorrowAHoliday))
+            if (_Holidays.Contains(isTomorrowAHoliday))
                 return true;
-            
+
             // this will allow the month of July to be free since this is specified in the instruction 
-            if(date.Month == 7)
+            if (date.Month == 7)
                 return true;
 
             return false;

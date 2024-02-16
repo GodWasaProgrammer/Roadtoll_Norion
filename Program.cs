@@ -23,9 +23,15 @@
                 new DateTime(2024, 2, 1, 17, 25, 0),
             };
 
+            DateTime[] TomorrowHolidayTest = new DateTime[]
+            {
+                new DateTime(2024,1,5,15, 0, 0),
+                new DateTime(2024,1,5,15,30, 0),
+            };
+
             /// just for demonstration purposes
             // Call GetTollFee method
-            int totalfee = tollCalculator.GetTollFee(new Car(), PassesInOneDay);
+            int totalfee = tollCalculator.GetTollFee(new Car(), TomorrowHolidayTest);
             
             ///just for demonstration purposes
             Console.WriteLine(totalfee);

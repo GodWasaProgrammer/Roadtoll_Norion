@@ -12,6 +12,7 @@
 
             /// <summary>
             /// Just for demonstration purposes
+            /// this should be a cost of 36
             // declare passes in a single day
             DateTime[] PassesInOneDay = new DateTime[]
             {
@@ -23,6 +24,7 @@
                 new DateTime(2024, 2, 1, 17, 25, 0),
             };
 
+            // this should be free since tomorrow is a holiday
             DateTime[] TomorrowHolidayTest = new DateTime[]
             {
                 new DateTime(2024,1,5,15, 0, 0),
@@ -31,7 +33,7 @@
 
             /// just for demonstration purposes
             // Call GetTollFee method
-            int totalfee = tollCalculator.GetTollFee(new Car(), TomorrowHolidayTest);
+            int totalfee = tollCalculator.GetTollFee(new Car(), PassesInOneDay);
             
             ///just for demonstration purposes
             Console.WriteLine(totalfee);

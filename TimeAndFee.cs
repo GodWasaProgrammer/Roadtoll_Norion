@@ -16,13 +16,12 @@
         }
 
         /// <summary>
-        /// imternal method to let you know if the time is in the toll time
+        /// method to let caller know if the time is in the toll time
         /// </summary>
         /// <param name="Date"></param>
         /// <returns></returns>
-        internal bool IsInTollTime(DateTime Date)
+        internal bool IsInTollTime(TimeOnly time) 
         {
-            TimeOnly time = TimeOnly.FromDateTime(Date);
             return time >= _start && time <= _end;
         }
 

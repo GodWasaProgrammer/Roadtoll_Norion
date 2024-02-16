@@ -161,9 +161,9 @@ namespace Roadtoll_Norion
             if (IsTollFreeDate(date) || IsTollFreeVehicle(vehicle))
                 return 0;
 
-            var TimeFee = TimesAndFees.Where(x => x.IsInTollTime(date)).FirstOrDefault();
+            var timeFee = TimesAndFees.Where(x => x.IsInTollTime(TimeOnly.FromDateTime(date))).FirstOrDefault();
 
-            return TimeFee == null ? 0 : TimeFee.Fee;
+            return timeFee == null ? 0 : timeFee.Fee;
         }
 
         /// The vehicle to be checked if it is toll free

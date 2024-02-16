@@ -91,8 +91,6 @@ namespace Roadtoll_Norion
 
             foreach (DateTime date in dates)
             {
-                int nextFee = GetTollFee(date, vehicle);
-
                 // if the date is within the grace period, we will add it to the list of grace period passes
                 if (StartTime != null && (date - StartTime.Value) <= TimeSpan.FromMinutes(60))
                 {

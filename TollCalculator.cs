@@ -92,12 +92,12 @@ namespace Roadtoll_Norion
             }
             catch (ArgumentNullException e)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine($"Exception:{e.Message}");
                 return 0;
             }
             catch (ArgumentException e)
             {
-                Console.WriteLine(e.Message);
+                Console.WriteLine($"Exception:{e.Message}");
                 return 0;
             }
 
@@ -156,6 +156,19 @@ namespace Roadtoll_Norion
         /// <returns></returns>
         public int GetTollFee(DateTime date, Vehicle vehicle)
         {
+            //This is only ever needed if this is called by itself and not from its other overload, but since its not specified
+            // in the instruction, i put it in anyway.
+            try
+            {
+                if (vehicle == null)
+                    throw new ArgumentNullException("vehicle cant be null");
+            }
+            catch(ArgumentNullException ex)
+            {
+                Console.WriteLine($"Exception:{ex.Message}");
+            }
+            // since datetime is a value type we dont need to check that as its a struct and cannot be null or empty.
+
             if (IsTollFreeDate(date) || IsTollFreeVehicle(vehicle))
                 return 0;
 
@@ -166,6 +179,8 @@ namespace Roadtoll_Norion
 
         /// The vehicle to be checked if it is toll free
         /// This will be checked against the list of toll free vehicles
+        /// this does not have exception handling because it is private and only ever called in the GetTollFee methods
+        /// Which has themselves exception handling so empty or null will never be passed here
         /// </summary>
         /// <param name="vehicle"></param>
         /// <returns></returns>
@@ -183,6 +198,7 @@ namespace Roadtoll_Norion
         /// </summary>
         /// Checks if our supplied date is a holiday, or a weekday
         /// <param name="date"> The Date To Be Checked</param>
+        /// DateTime is a value type and will not be null/empty so no exception handling here
         /// <returns>a bool that tells you if its free or not</returns>
         private bool IsTollFreeDate(DateTime date)
         {

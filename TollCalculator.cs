@@ -9,12 +9,16 @@ namespace Roadtoll_Norion
         /// This is to cut down on possibly expensive API calls
         /// within the calling method.
         /// <param name="YearToCalculate">The year to be calculated</param>
-        public TollCalculator(DateOnly YearToCalculate)
+        public TollCalculator(int yearToCalculate)
         {
-            _Holidays = new SwedenPublicHoliday().PublicHolidays(YearToCalculate.Year);
+            _Holidays = new SwedenPublicHoliday().PublicHolidays(yearToCalculate);
         }
 
+        /// <summary>
+        /// Private list of holidays which is taken from the constructor tollcalculator
+        /// </summary>
         private IList<DateTime> _Holidays;
+
         /// <summary>
         /// The maximum toll fee for one day
         /// </summary>
@@ -83,43 +87,43 @@ namespace Roadtoll_Norion
             }
 
             // set the initial date to the first date in the array
-            DateTime? StartTime = dates.First();
+            DateTime? startTime = dates.First();
 
             // since we dont know if the dates are in order, we will sort them
             Array.Sort(dates);
 
-            List<List<DateTime>> GraceTimes = new List<List<DateTime>>();
+            List<List<DateTime>> graceTimes = new List<List<DateTime>>();
 
             // storing the values within an hour-interval
-            var GracePeriod = new List<DateTime>();
+            var gracePeriod = new List<DateTime>();
 
             foreach (DateTime date in dates)
             {
                 // if the date is within the grace period, we will add it to the list of grace period passes
-                if (StartTime != null && (date - StartTime.Value) <= TimeSpan.FromMinutes(60))
+                if (startTime != null && (date - startTime.Value) <= TimeSpan.FromMinutes(60))
                 {
-                    GracePeriod.Add(date);
+                    gracePeriod.Add(date);
                 }
                 else
                 {
-                    GraceTimes.Add(GracePeriod);
-                    GracePeriod = new List<DateTime>();
-                    StartTime = date;
-                    GracePeriod.Add(date);
+                    graceTimes.Add(gracePeriod);
+                    gracePeriod = new List<DateTime>();
+                    startTime = date;
+                    gracePeriod.Add(date);
                 }
 
                 // if we have made segments of all time intervals, we will add the last segment to the list of grace period passes
                 if (date == dates.Last())
                 {
-                    GraceTimes.Add(GracePeriod);
+                    graceTimes.Add(gracePeriod);
                 }
 
             }
 
             int totalFee = 0;
-            foreach (var gracePeriod in GraceTimes)
+            foreach (var currentGracePeriod in graceTimes)
             {
-                totalFee += gracePeriod.Max(x => GetTollFee(x, vehicle));
+                totalFee += currentGracePeriod.Max(x => GetTollFee(x, vehicle));
             }
 
             if (totalFee > MaxTollFee) totalFee = MaxTollFee;

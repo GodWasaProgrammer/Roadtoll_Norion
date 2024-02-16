@@ -4,14 +4,11 @@
     {
         static void Main()
         {
-            // passed into tollcalculator
-            // this obviously need to match with the year you want to calculate,
-            // the month and day doesnt matter since its only the year that is used
-            DateOnly CurrentDate = new DateOnly(2024, 2, 1);
+            int year = 2024;
             
             /// <summary>
             /// instantiate tollcalculator
-            TollCalculator tollCalculator = new TollCalculator(CurrentDate);
+            TollCalculator tollCalculator = new TollCalculator(year);
 
             /// <summary>
             /// Just for demonstration purposes

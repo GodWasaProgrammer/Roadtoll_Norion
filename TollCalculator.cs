@@ -11,10 +11,14 @@ namespace Roadtoll_Norion
         /// <param name="YearToCalculate">The year to be calculated</param>
         public TollCalculator(DateOnly YearToCalculate)
         {
-            Holidays = new SwedenPublicHoliday().PublicHolidays(YearToCalculate.Year);
+            _Holidays = new SwedenPublicHoliday().PublicHolidays(YearToCalculate.Year);
         }
 
-        private IList<DateTime> Holidays;
+        private IList<DateTime> _Holidays;
+        /// <summary>
+        /// The maximum toll fee for one day
+        /// </summary>
+        private const int MaxTollFee = 60;
 
         /// <summary>
         /// List of vehicles that are toll free
@@ -118,7 +122,7 @@ namespace Roadtoll_Norion
                 totalFee += gracePeriod.Max(x => GetTollFee(x, vehicle));
             }
 
-            if (totalFee > 60) totalFee = 60;
+            if (totalFee > MaxTollFee) totalFee = MaxTollFee;
             return totalFee;
         }
 
@@ -163,7 +167,7 @@ namespace Roadtoll_Norion
                 return true;
 
             var dateOnly = date.Date;
-            if (Holidays.Contains(dateOnly))
+            if (_Holidays.Contains(dateOnly))
                 return true;
 
             return false;

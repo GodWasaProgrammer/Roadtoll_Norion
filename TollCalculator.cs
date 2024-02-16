@@ -127,7 +127,7 @@ namespace Roadtoll_Norion
         /// <param name="date">the single date and time to be checked</param>
         /// <param name="vehicle">the vehicle which is being tolled</param>
         /// <returns></returns>
-        private int GetTollFee(DateTime date, Vehicle vehicle)
+        public int GetTollFee(DateTime date, Vehicle vehicle)
         {
             if (IsTollFreeDate(date) || IsTollFreeVehicle(vehicle))
                 return 0;

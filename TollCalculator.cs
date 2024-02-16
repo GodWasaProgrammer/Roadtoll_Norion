@@ -197,6 +197,10 @@ namespace Roadtoll_Norion
             var dateOnly = date.Date;
             if (_Holidays.Contains(dateOnly))
                 return true;
+            
+            // this will allow the month of July to be free since this is specified in the instruction 
+            if(date.Month == 7)
+                return true;
 
             return false;
         }

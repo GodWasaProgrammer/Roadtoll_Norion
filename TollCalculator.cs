@@ -4,12 +4,11 @@ namespace Roadtoll_Norion
 {
     public class TollCalculator
     {
-        /// <summary>
+        /// </summary>
         /// Added requirement to supply year to calculate
         /// This is to cut down on possibly expensive API calls
         /// within the calling method.
-        /// </summary>
-        /// <param name="YearToCalculate"></param>
+        /// <param name="YearToCalculate">The year to be calculated</param>
         public TollCalculator(DateOnly YearToCalculate)
         {
             Holidays = new SwedenPublicHoliday().PublicHolidays(YearToCalculate.Year);
@@ -54,6 +53,12 @@ namespace Roadtoll_Norion
             new(18,00,18,29,8)
         };
 
+        /// <summary>
+        /// So this has been modified so that it correctly segments the passes into time intervals
+        /// then individually calculates the toll fee for each interval
+        /// it will then sum up the toll fees for each interval and return the total
+        /// In my opinion the method is now much more clear with intent, and also easier to read
+        /// It also correctly handles time intervals which the OG method did not
         /**
          * Calculate the total toll fee for one day
          *
@@ -116,7 +121,6 @@ namespace Roadtoll_Norion
             return totalFee;
         }
 
-        /// <summary>
         /// The vehicle to be checked if it is toll free
         /// This will be checked against the list of toll free vehicles
         /// </summary>
@@ -133,11 +137,11 @@ namespace Roadtoll_Norion
             return false;
         }
 
-        /// <summary>
+        
         /// In my opinion this shouldnt be an overload, it could be its own method, because its only ever called in another overload...
         /// </summary>
-        /// <param name="date"></param>
-        /// <param name="vehicle"></param>
+        /// <param name="date">the single date and time to be checked</param>
+        /// <param name="vehicle">the vehicle which is being tolled</param>
         /// <returns></returns>
         private int GetTollFee(DateTime date, Vehicle vehicle)
         {
@@ -149,9 +153,8 @@ namespace Roadtoll_Norion
             return TimeFee == null ? 0 : TimeFee.Fee;
         }
 
-        /// <summary>
-        /// Checks if our supplied date is a holiday, or a weekday
         /// </summary>
+        /// Checks if our supplied date is a holiday, or a weekday
         /// <param name="date"> The Date To Be Checked</param>
         /// <returns>a bool that tells you if its free or not</returns>
         private bool IsTollFreeDate(DateTime date)

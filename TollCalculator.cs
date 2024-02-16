@@ -97,7 +97,7 @@ namespace Roadtoll_Norion
 
             foreach (DateTime date in dates)
             {
-                if (date.Date != startTime)
+                if (date.Day != startTime.Value.Day)
                 {
                     throw new ArgumentException("This method is not made to handle more then one day, pass only a single day");
                 }

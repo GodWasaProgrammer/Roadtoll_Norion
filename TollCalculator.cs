@@ -81,25 +81,12 @@ namespace Roadtoll_Norion
         public int GetTollFee(Vehicle vehicle, DateTime[] dates)
         {
             /// exception handling for the parameters
-            try
-            {
-                if (vehicle == null)
-                    throw new ArgumentNullException("Vehicle cannot be null");
-                if (dates == null)
-                    throw new ArgumentNullException("Dates cannot be null");
-                if (dates.Length == 0)
-                    throw new ArgumentException("Dates cannot be empty");
-            }
-            catch (ArgumentNullException e)
-            {
-                Console.WriteLine($"Exception:{e.Message}");
-                return 0;
-            }
-            catch (ArgumentException e)
-            {
-                Console.WriteLine($"Exception:{e.Message}");
-                return 0;
-            }
+            if (vehicle == null)
+                throw new ArgumentNullException("Vehicle cannot be null");
+            if (dates == null)
+                throw new ArgumentNullException("Dates cannot be null");
+            if (dates.Length == 0)
+                throw new ArgumentException("Dates cannot be empty");
 
             // if the vehicle is toll free, or the date is toll free, there will be no toll fee
             if (IsTollFreeVehicle(vehicle) || IsTollFreeDate(dates.First()))
@@ -107,6 +94,15 @@ namespace Roadtoll_Norion
 
             // set the initial date to the first date in the array
             DateTime? startTime = dates.First();
+
+            foreach (DateTime date in dates)
+            {
+                if (date.Date != startTime)
+                {
+                    throw new ArgumentException("This method is not made to handle more then one day, pass only a single day");
+                }
+
+            }
 
             // since we dont know if the dates are in order, we will sort them
             Array.Sort(dates);
@@ -158,15 +154,8 @@ namespace Roadtoll_Norion
         {
             //This is only ever needed if this is called by itself and not from its other overload, but since its not specified
             // in the instruction, i put it in anyway.
-            try
-            {
-                if (vehicle == null)
-                    throw new ArgumentNullException("vehicle cant be null");
-            }
-            catch(ArgumentNullException ex)
-            {
-                Console.WriteLine($"Exception:{ex.Message}");
-            }
+            if (vehicle == null)
+                throw new ArgumentNullException("vehicle cant be null");
             // since datetime is a value type we dont need to check that as its a struct and cannot be null or empty.
 
             if (IsTollFreeDate(date) || IsTollFreeVehicle(vehicle))

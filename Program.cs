@@ -5,7 +5,7 @@
         static void Main()
         {
             int year = 2024;
-            
+
             /// <summary>
             /// instantiate tollcalculator
             TollCalculator tollCalculator = new TollCalculator(year);
@@ -23,10 +23,9 @@
                 new DateTime(2024, 2, 1, 17, 25, 0),
             };
 
-            DateTime[] emptyDateTime = new DateTime[] { };
             /// just for demonstration purposes
             // Call GetTollFee method
-            int totalfee = tollCalculator.GetTollFee(new Car(), emptyDateTime);
+            int totalfee = tollCalculator.GetTollFee(new Car(), PassesInOneDay);
             
             ///just for demonstration purposes
             Console.WriteLine(totalfee);

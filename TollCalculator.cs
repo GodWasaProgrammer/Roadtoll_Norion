@@ -18,6 +18,9 @@ namespace Roadtoll_Norion
 
         /// <summary>
         /// List of vehicles that are toll free
+        /// I have also created the necessary classes for the vehicles
+        /// which adhere to the Vehicle interface, and does not change any implementation
+        /// details of Vehicle
         /// </summary>
         static List<Type> TollFreeVehicles = new()
         {

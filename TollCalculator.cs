@@ -124,6 +124,21 @@ namespace Roadtoll_Norion
             return totalFee;
         }
 
+        /// In my opinion this shouldnt be an overload, it could be its own method, because its only ever called in another overload...
+        /// </summary>
+        /// <param name="date">the single date and time to be checked</param>
+        /// <param name="vehicle">the vehicle which is being tolled</param>
+        /// <returns></returns>
+        private int GetTollFee(DateTime date, Vehicle vehicle)
+        {
+            if (IsTollFreeDate(date) || IsTollFreeVehicle(vehicle))
+                return 0;
+
+            var TimeFee = TimesAndFees.Where(x => x.IsInTollTime(date)).FirstOrDefault();
+
+            return TimeFee == null ? 0 : TimeFee.Fee;
+        }
+
         /// The vehicle to be checked if it is toll free
         /// This will be checked against the list of toll free vehicles
         /// </summary>
@@ -138,22 +153,6 @@ namespace Roadtoll_Norion
                 return true;
 
             return false;
-        }
-
-        
-        /// In my opinion this shouldnt be an overload, it could be its own method, because its only ever called in another overload...
-        /// </summary>
-        /// <param name="date">the single date and time to be checked</param>
-        /// <param name="vehicle">the vehicle which is being tolled</param>
-        /// <returns></returns>
-        private int GetTollFee(DateTime date, Vehicle vehicle)
-        {
-            if (IsTollFreeDate(date) || IsTollFreeVehicle(vehicle))
-                return 0;
-
-            var TimeFee = TimesAndFees.Where(x => x.IsInTollTime(date)).FirstOrDefault();
-
-            return TimeFee == null ? 0 : TimeFee.Fee;
         }
 
         /// </summary>

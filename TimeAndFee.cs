@@ -8,10 +8,10 @@
 
         public int Fee => _fee;
 
-        public TimeAndFee(int startH, int startM, int stopH, int stopM, int fee)
+        public TimeAndFee(int startHour, int startMinute, int stopHour, int stopMinute, int fee)
         {
-            _start = new TimeOnly(startH, startM);
-            _end = new TimeOnly(stopH, stopM);
+            _start = new TimeOnly(startHour, startMinute);
+            _end = new TimeOnly(stopHour, stopMinute);
             _fee = fee;
         }
 

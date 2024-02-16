@@ -70,6 +70,7 @@ namespace Roadtoll_Norion
         /// it will then sum up the toll fees for each interval and return the total
         /// In my opinion the method is now much more clear with intent, and also easier to read
         /// It also correctly handles time intervals which the OG method did not
+        /// also includes exception handling for the parameters
         /**
          * Calculate the total toll fee for one day
          *
@@ -79,12 +80,30 @@ namespace Roadtoll_Norion
          */
         public int GetTollFee(Vehicle vehicle, DateTime[] dates)
         {
-            // if we dont have a vehicle or dates, we cant calculate the toll fee
-            // or if the vehicle is tollfree, or the date is tollfree we return 0
-            if (vehicle == null || dates == null || IsTollFreeVehicle(vehicle) || IsTollFreeDate(dates[0]))
+            /// exception handling for the parameters
+            try
             {
+                if (vehicle == null)
+                    throw new ArgumentNullException("Vehicle cannot be null");
+                if (dates == null)
+                    throw new ArgumentNullException("Dates cannot be null");
+                if (dates.Length == 0)
+                    throw new ArgumentException("Dates cannot be empty");
+            }
+            catch (ArgumentNullException e)
+            {
+                Console.WriteLine(e.Message);
                 return 0;
             }
+            catch (ArgumentException e)
+            {
+                Console.WriteLine(e.Message);
+                return 0;
+            }
+
+            // if the vehicle is toll free, or the date is toll free, there will be no toll fee
+            if (IsTollFreeVehicle(vehicle) || IsTollFreeDate(dates.First()))
+                return 0;
 
             // set the initial date to the first date in the array
             DateTime? startTime = dates.First();

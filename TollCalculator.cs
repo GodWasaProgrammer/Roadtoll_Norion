@@ -147,7 +147,6 @@ namespace Roadtoll_Norion
                 }
                 // we then only add the max one, and clear the list for the next loop.
                 totalFee += fees.Max();
-                fees.Clear();
             }
 
             if (totalFee > MaxTollFee) totalFee = MaxTollFee;

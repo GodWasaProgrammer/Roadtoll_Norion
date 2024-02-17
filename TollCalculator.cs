@@ -154,10 +154,10 @@ namespace Roadtoll_Norion
             return totalFee;
         }
 
+        /// </summary>
         /// In my opinion this shouldnt be an overload, it could be its own method, because its only ever called in another overload...
         /// atleast in the original code, since i dont like that it was being called by another overload, i made the necessary calls
         /// directly from the other overload.
-        /// </summary>
         /// <param name="date">the single date and time to be checked</param>
         /// <param name="vehicle">the vehicle which is being tolled</param>
         /// <returns></returns>
@@ -177,9 +177,9 @@ namespace Roadtoll_Norion
             return timeFee == null ? 0 : timeFee.Fee;
         }
 
+        /// </summary>
         /// The vehicle to be checked if it is toll free
         /// This will be checked against the list of toll free vehicles
-        /// </summary>
         /// <param name="vehicle"></param>
         /// <returns></returns>
         private bool IsTollFreeVehicle(Vehicle vehicle)

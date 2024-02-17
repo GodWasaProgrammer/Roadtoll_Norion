@@ -193,9 +193,11 @@ namespace Roadtoll_Norion
             return false;
         }
 
+        const int FreeMonth = 7;
+
         /// </summary>
         /// Checks if our supplied date is a holiday, or a weekday
-        /// also checks if t
+        /// also checks if its the month of july, which is free
         /// <param name="date"> The Date To Be Checked</param>
         /// DateTime is a value type and will not be null/empty so no exception handling here
         /// <returns>a bool that tells you if its free or not</returns>
@@ -213,7 +215,7 @@ namespace Roadtoll_Norion
                 return true;
 
             // this will allow the month of July to be free since this is specified in the instruction 
-            if (date.Month == 7)
+            if (date.Month == FreeMonth)
                 return true;
 
             return false;

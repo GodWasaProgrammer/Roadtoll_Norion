@@ -16,19 +16,16 @@ namespace Roadtoll_Norion
 
         /// <summary>
         /// Private list of holidays which is taken from the constructor tollcalculator
-        /// </summary>
         private IList<DateTime> _Holidays;
 
         /// <summary>
         /// The maximum toll fee for one day
-        /// </summary>
         private const int MaxTollFee = 60;
 
         /// <summary>
         /// List of vehicles that are toll free
         /// I have also created the necessary classes for the vehicles
         /// which adhere to the Vehicle interface, and does not change any implementation
-        /// </summary>
         static List<Type> TollFreeVehicles = new()
         {
             typeof(Motorbike),
@@ -49,7 +46,6 @@ namespace Roadtoll_Norion
 
         /// <summary>
         /// List of times and fees, which is using the TimeAndFee class for a structured approach
-        /// </summary>
         static List<TimeAndFee> TimesAndFees = new()
         {
             new(06,00,06,29,8),
@@ -160,7 +156,7 @@ namespace Roadtoll_Norion
         /// directly from the other overload.
         /// <param name="date">the single date and time to be checked</param>
         /// <param name="vehicle">the vehicle which is being tolled</param>
-        /// <returns></returns>
+        /// <returns>An int representing the fee for one day</returns>
         public int GetTollFee(DateTime date, Vehicle vehicle)
         {
             //This is only ever needed if this is called by itself and not from its other overload, but since its not specified
@@ -181,7 +177,7 @@ namespace Roadtoll_Norion
         /// The vehicle to be checked if it is toll free
         /// This will be checked against the list of toll free vehicles
         /// <param name="vehicle"></param>
-        /// <returns></returns>
+        /// <returns>A bool indicating if the vehicle is free of toll charges or not</returns>
         private bool IsTollFreeVehicle(Vehicle vehicle)
         {
             if (vehicle == null)

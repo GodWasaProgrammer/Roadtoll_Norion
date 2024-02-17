@@ -5,13 +5,8 @@
         static void Main()
         {
             int year = 2024;
-
-            /// <summary>
-            /// instantiate tollcalculator
             TollCalculator tollCalculator = new TollCalculator(year);
 
-            /// <summary>
-            /// Just for demonstration purposes
             /// this should be a cost of 36
             // declare passes in a single day
             DateTime[] PassesInOneDay = new DateTime[]
@@ -34,7 +29,6 @@
             DateTime[] EmptyDateTimes = new DateTime[] { };
 
             /// just for demonstration purposes
-            // Call GetTollFee method
             int totalFee = 0;
             try
             {

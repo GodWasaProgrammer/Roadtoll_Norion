@@ -66,9 +66,8 @@ namespace Roadtoll_Norion
         /// In my opinion the method is now much more clear with intent, and also easier to read
         /// It also correctly handles time intervals which the OG method did not
         /// also includes exception handling for the parameters
-        /**
+        /*
          * Calculate the total toll fee for one day
-         *
          * @param vehicle - the vehicle
          * @param dates   - date and time of all passes on one day
          * @return - the total toll fee for that day
@@ -96,7 +95,6 @@ namespace Roadtoll_Norion
                 {
                     throw new ArgumentException("This method is not made to handle more then one day, pass only a single day");
                 }
-
             }
 
             // since we dont know if the dates are in order, we will sort them
@@ -141,8 +139,9 @@ namespace Roadtoll_Norion
                     if (TimeFee != null)
                         fees.Add(TimeFee.Fee);
                 }
-                // we then only add the max one, and clear the list for the next loop.
-                totalFee += fees.Max();
+                // we then only add the max one,if there is one.
+                if (fees.Count > 0)
+                    totalFee += fees.Max();
             }
 
             if (totalFee > MaxTollFee) totalFee = MaxTollFee;

@@ -14,18 +14,15 @@ namespace Roadtoll_Norion
             _Holidays = new SwedenPublicHoliday().PublicHolidays(yearToCalculate);
         }
 
-        /// <summary>
         /// Private list of holidays which is taken from the constructor tollcalculator
         private IList<DateTime> _Holidays;
 
-        /// <summary>
         /// The maximum toll fee for one day
         private const int MaxTollFee = 60;
 
-        /// <summary>
         /// List of vehicles that are toll free
         /// I have also created the necessary classes for the vehicles
-        /// which adhere to the Vehicle interface, and does not change any implementation
+        /// which adhere to the Vehicle interface, and does not change any implementation <summary>
         static List<Type> TollFreeVehicles = new()
         {
             typeof(Motorbike),
@@ -35,16 +32,14 @@ namespace Roadtoll_Norion
             typeof(Foreign)
         };
 
-        /// <summary>
         /// List of days that are toll free
-        /// </summary>
+        /// This is a list because its flexible and easily extendable if necessary 
         static List<DayOfWeek> FreeWeekDays = new List<DayOfWeek>
         {
             DayOfWeek.Saturday,
             DayOfWeek.Sunday
         };
 
-        /// <summary>
         /// List of times and fees, which is using the TimeAndFee class for a structured approach
         static List<TimeAndFee> TimesAndFees = new()
         {
@@ -64,8 +59,11 @@ namespace Roadtoll_Norion
         /// then individually calculates the toll fee for each interval
         /// it will then sum up the toll fees for each interval and return the total
         /// In my opinion the method is now much more clear with intent, and also easier to read
+        /// This in my opinion should rather return a custom class that lets you see which passes
+        /// was free and so on, but i didnt want to mess with the methods signature.
         /// It also correctly handles time intervals which the OG method did not
         /// also includes exception handling for the parameters
+        /// Will throw exceptions on nulls/empty/if you passed an array with more then one day
         /*
          * Calculate the total toll fee for one day
          * @param vehicle - the vehicle
@@ -153,16 +151,16 @@ namespace Roadtoll_Norion
         /// In my opinion this shouldnt be an overload, it could be its own method, because its only ever called in another overload...
         /// atleast in the original code, since i dont like that it was being called by another overload, i made the necessary calls
         /// directly from the other overload.
-        /// <param name="date">the single date and time to be checked</param>
-        /// <param name="vehicle">the vehicle which is being tolled</param>
-        /// <returns>An int representing the fee for one day</returns>
+        /// <param name="date"> The single date and time to be checked </param>
+        /// <param name="vehicle"> The vehicle which is being tolled </param>
+        /// <returns> An int representing the fee for one day </returns>
         public int GetTollFee(DateTime date, Vehicle vehicle)
         {
+            // Since datetime is a value type we dont need to check that as its a struct and cannot be null or empty.
             //This is only ever needed if this is called by itself and not from its other overload, but since its not specified
             // in the instruction, i put it in anyway.
             if (vehicle == null)
                 throw new ArgumentNullException("vehicle cant be null");
-            // since datetime is a value type we dont need to check that as its a struct and cannot be null or empty.
 
             if (IsTollFreeDate(date) || IsTollFreeVehicle(vehicle))
                 return 0;
@@ -173,10 +171,8 @@ namespace Roadtoll_Norion
         }
 
         /// </summary>
-        /// The vehicle to be checked if it is toll free
-        /// This will be checked against the list of toll free vehicles
-        /// <param name="vehicle"></param>
-        /// <returns>A bool indicating if the vehicle is free of toll charges or not</returns>
+        /// <param name="vehicle"> The vehicle to check </param>
+        /// <returns> A bool indicating if the vehicle is free of toll charges or not </returns>
         private bool IsTollFreeVehicle(Vehicle vehicle)
         {
             if (vehicle == null)
@@ -195,10 +191,11 @@ namespace Roadtoll_Norion
 
         /// </summary>
         /// Checks if our supplied date is a holiday, or a weekday
-        /// also checks if its the month of july, which is free
-        /// <param name="date"> The Date To Be Checked</param>
+        /// Also checks if its the month of july, which is free
+        /// Also checks if tomorrow is a holiday, then that day will be fre aswell
+        /// <param name="date"> The Date To Be Checked </param>
         /// DateTime is a value type and will not be null/empty so no exception handling here
-        /// <returns>a bool that tells you if its free or not</returns>
+        /// <returns> A bool that tells you if its free or not </returns>
         private bool IsTollFreeDate(DateTime date)
         {
             if (FreeWeekDays.Contains(date.DayOfWeek))

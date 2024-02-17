@@ -11,40 +11,20 @@
             // declare passes in a single day
             DateTime[] PassesInOneDay = new DateTime[]
             {
-                new DateTime(2024, 2, 1, 15, 0, 0),
-                new DateTime(2024, 2, 1, 15, 29, 0),
-                new DateTime(2024, 2, 1, 15, 59, 0),
-                new DateTime(2024, 2, 1, 14, 59, 0),
-                new DateTime(2024, 2, 1, 16, 45, 0),
-                new DateTime(2024, 2, 1, 17, 25, 0),
+                new DateTime(2024, 2, 1, 15, 0, 59),
+                new DateTime(2024, 2, 1, 15, 29, 59),
+                new DateTime(2024, 2, 1, 15, 59, 59),
+                new DateTime(2024, 2, 1, 14, 59, 59),
+                new DateTime(2024, 2, 1, 16, 45, 59),
+                new DateTime(2024, 2, 1, 17, 25, 59),
             };
 
-            // this should be free since tomorrow is a holiday
-            DateTime[] TomorrowHolidayTest = new DateTime[]
-            {
-                new DateTime(2024,1,5,15, 0, 0),
-                new DateTime(2024,1,5,15,30, 0),
-            };
-
-            DateTime[] EmptyDateTimes = new DateTime[] { };
-
-            DateTime[] fuckery = new DateTime[]
-            {
-                new DateTime(2024,2,1,06,59,59,999,999),
-            };
-
-            DateTime[] CtorDoubleCheck = new DateTime[]
-            {
-                new DateTime(2024,2,1,15,29,59,999,999).AddTicks(99999),
-                new DateTime(2024,2,1,17,29,59,999,999),
-                new DateTime(2024,2,1,18,59,59,999,999)
-            };
 
             /// just for demonstration purposes
             int totalFee = 0;
             try
             {
-                totalFee = tollCalculator.GetTollFee(new Car(), CtorDoubleCheck);
+                totalFee = tollCalculator.GetTollFee(new Car(), PassesInOneDay);
             }
             catch (ArgumentNullException ex)
             {

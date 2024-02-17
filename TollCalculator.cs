@@ -193,7 +193,10 @@ namespace Roadtoll_Norion
             return false;
         }
 
-        const int FreeMonth = 7;
+        private List<int> freeMonths = new List<int>()
+        {
+            7,
+        };
 
         /// </summary>
         /// Checks if our supplied date is a holiday, or a weekday
@@ -215,8 +218,11 @@ namespace Roadtoll_Norion
                 return true;
 
             // this will allow the month of July to be free since this is specified in the instruction 
-            if (date.Month == FreeMonth)
-                return true;
+            foreach (var freeMonth in freeMonths)
+            {
+                if (date.Month == freeMonth)
+                    return true;
+            }
 
             return false;
         }

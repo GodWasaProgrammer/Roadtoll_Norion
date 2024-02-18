@@ -1,6 +1,6 @@
 ﻿namespace Roadtoll_Norion
 {
-    internal class Diplomat : Vehicle
+    internal class Diplomat : IVehicle
     {
         public string GetVehicleType()
         {

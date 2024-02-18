@@ -1,0 +1,36 @@
+﻿Every passage through a toll station in Gothenburg costs 8, 13, or 18 kronor depending on the time of day. The maximum amount per day and vehicle is 60 kronor.
+
+Times Amount
+06:00–06:29 8 kr
+06:30–06:59 13 kr
+07:00–07:59 18 kr
+08:00–08:29 13 kr
+08:30–14:59 8 kr
+15:00–15:29 13 kr
+15:30–16:59 18 kr
+17:00–17:59 13 kr
+18:00–18:29 8 kr
+18:30–05:59 0 kr
+
+Congestion tax is charged for vehicles passing a toll station Monday to Friday between 06:00 and 18:29. 
+Tax is not charged on Saturdays, public holidays, days before public holidays, or during the month of July. 
+Some vehicles are exempt from congestion tax. A car that passes several toll stations within 60 minutes is only taxed once. 
+The amount to be paid in such cases is the highest amount among those passages.
+
+
+Introduction
+Code test
+
+Task
+The goal is to create an application for managing the tolls in Gothenburg along with calculating fees for vehicles.
+
+There are no direct syntax errors; it's more about structure and general programming skills not specific to any language. There is room for a variety of improvements – we want you to think about what changes and additions you would make to get a code that you "stand by".
+
+Timeframe
+No deadline, but please submit the result within 7-10 days.
+
+Submission
+Upload your solution to your own GitHub so we can follow the commit history.
+
+
+

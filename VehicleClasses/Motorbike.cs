@@ -1,6 +1,6 @@
 ﻿namespace Roadtoll_Norion
 {
-    public class Motorbike : Vehicle
+    public class Motorbike : IVehicle
     {
         public string GetVehicleType()
         {

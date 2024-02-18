@@ -2,14 +2,13 @@
 {
     internal class TimeAndFee
     {
-        private TimeOnly _start;
-        private TimeOnly _end;
-        private int _fee;
+        private readonly TimeOnly _start;
+        private readonly TimeOnly _end;
+        private readonly int _fee;
         private const int MaxSeconds = 59;
         private const int MaxMillies = 999;
         private const int MaxMicros = 999;
         public int Fee => _fee;
-
         public TimeAndFee(int startHour, int startMinute, int stopHour, int stopMinute, int fee)
         {
             _start = new TimeOnly(startHour, startMinute);
@@ -25,7 +24,5 @@
         {
             return time >= _start && time <= _end;
         }
-
     }
-
 }

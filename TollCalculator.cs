@@ -112,7 +112,7 @@ public class TollCalculator
                 startTime = date;
                 gracePeriod.Add(date);
             }
-            // weird
+
             // if we have made segments of all time intervals, we will add the last segment to the list of grace period passes
             if (date == dates.Last())
             {
@@ -217,5 +217,4 @@ public class TollCalculator
 
         return false;
     }
-
 }
